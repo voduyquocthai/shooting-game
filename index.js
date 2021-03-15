@@ -194,11 +194,12 @@ function animate(){
     enemies.forEach((enemy, index) => {
     enemy.update()
     const distan = Math.hypot (player.x -enemy.x, player.y - enemy.y )
+    let boom = new Audio("sounds/explosion.mp3");
     //end game
     if (distan - enemy.radius - player.radius < -1){
     cancelAnimationFrame(animationID)
     modal.style.display = 'flex'
-    bigscorepoint.innerHTML = score
+    bigscorepoint.innerHTML = score 
     }
     projectiles.forEach((projectile, projectileIndex) => {
         const dist = Math.hypot (projectile.x -enemy.x, projectile.y - enemy.y )
@@ -208,6 +209,7 @@ function animate(){
 
         // tạo mảnh vỡ 
         for(let i = 0; i < enemy.radius * 2; i++){
+            boom.play();
             particles.push(
                 new Particle(
                     projectile.x,
@@ -242,7 +244,7 @@ function animate(){
         })
     })
 }
-    
+let shoot = new Audio("sounds/shooting.mp3");
 // thêm sự kiện click bắn đạn
 window.addEventListener('click', (event) => {
     const angle = Math.atan2(
@@ -253,11 +255,15 @@ window.addEventListener('click', (event) => {
         y: Math.sin(angle)*20
     }
     projectiles.push(new Projectile(canvas.width /2, canvas.height /2, 5, 'white', velocity ))
+    shoot.play();
 })
 //thêm sự kiện click Start Game
+let arcade = new Audio("sounds/arcade.mp3")
 startGameBt.addEventListener('click', () => {
     init()
     animate()
     spawnEnemies()
+    arcade.loop = true;
+    arcade.play();
     modal.style.display = 'none'
 }) 
